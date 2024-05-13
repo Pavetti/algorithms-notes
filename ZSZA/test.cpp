@@ -6,6 +6,6 @@ int n;
 int main()
 {
     cin >> n;
-    cout << n +3;
+    cout << n +4;
     return 0;
 }
