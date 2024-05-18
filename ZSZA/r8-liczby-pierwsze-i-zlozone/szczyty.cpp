@@ -7,10 +7,10 @@ int n;
 int main()
 {
     cin >> n;
-    int a[n];
+    int road[n];
     for (int i = 0; i < n; i++)
     {
-        cin >> a[i];
+        cin >> road[i];
     }
     int wynik = 0;
     for (int i = 1; i * i < n; i++)
@@ -19,37 +19,37 @@ int main()
         {
             int a = i;
             int b = n / i;
-            bool final_a = true;
-            bool final_b = true;
-            bool zgodnosc_a = false;
-            bool zgodnosc_b = false;
-            for (int t = 1; t < n - 1; t++)
+            int szczyty_count = 0;
+            int pomocnik;
+
+            for (int s = 1; s < n - 1; s++)
             {
-                if (a[t] > a[t - 1] && a[t] > a[t + 1])
+                if (road[s] > road[s - 1] && road[s] > road[s + 1])
                 {
-                    zgodnosc_a = true;
-                    zgodnosc_b = true;
-                    i++;
+                    szczyty_count++;
+                    pomocnik = (s + 1) % a;
+                    s += a - pomocnik;
                 }
-                if (a % (t + 1) == 0 && zgodnosc_a == false)
+            }
+            if (szczyty_count == b)
+            {
+                wynik = max(wynik, b);
+            }
+            szczyty_count = 0;
+            for (int s = 1; s < n - 1; s++)
+            {
+                if (road[s] > road[s - 1] && road[s] > road[s + 1])
                 {
-                    final_a = false;
-                    break;
+                    szczyty_count++;
+                    pomocnik = (s + 1) % b;
+                    s += b - pomocnik;
                 }
-                else
-                {
-                    zgodnosc_a = false;
-                }
-                if (b % (t + 1) == 0 && zgodnosc_b == false)
-                {
-                    final_b = false;
-                    break;
-                }
-                else
-                {
-                    zgodnosc_b = false;
-                }
+            }
+            if (szczyty_count == a)
+            {
+                wynik = max(wynik, a);
             }
         }
     }
+    cout << wynik;
 }
