@@ -18,26 +18,19 @@ int main()
     int F[k + 1] = {0};
     for (int i = 2; i * i <= k; i++)
     {
-        if (!F[i])
+        if (F[k])
         {
-            for (int j = i + i; j <= k; j += i)
+            for (int j = i * i; j <= k; j += i)
             {
-                if (!F[j])
-                    F[j] = i;
+                F[k] += 1;
             }
         }
     }
+
     int pref[k + 1] = {0};
-    for (int i = 2; i * i * i <= k; ++i)
+    for (int i = 2; i <= k; i++)
     {
-        if (F[i] == 0)
-        {
-            pref[i * i * i] = 1;
-        }
-    }
-    for (int i = 2; i <= k; ++i)
-    {
-        if (F[i] != 0 && F[i] * F[i] != i && F[i / F[i]] == 0)
+        if (F[i] == 1)
         {
             pref[i] = 1;
         }
