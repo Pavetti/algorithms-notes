@@ -7,57 +7,71 @@ using namespace std;
 
 int main()
 {
-    int n, s;
+    int n, s, u, pierwszy, wynik;
     cin >> n >> s;
-    int a[n];
-    for (int i = 0; i < n; ++i)
-    {
-        cin >> a[i];
-    }
 
+    vector<pair<int, int>> pref_s;
     vector<pair<int, int>> pref;
-    pref.push_back(make_pair(a[0], 0));
+    cin >> u;
+    pref_s.push_back(make_pair(u, 0));
+    pierwszy = u;
     for (int i = 1; i < n; ++i)
     {
-        pref.push_back(make_pair(a[i] + pref[i - 1].first, i));
+        cin >> u;
+        pref_s.push_back(make_pair(u + pref_s[i - 1].first, i));
     }
-    sort(pref.begin(), pref.end(), [](const pair<int, int> &a, const pair<int, int> &b)
+
+    sort(pref_s.begin(), pref_s.end(), [](const pair<int, int> &a, const pair<int, int> &b)
          { return a.first < b.first; });
 
-    int poc = 0;
-    vector<pair<pair<int, int>, pair<int, int>>> dobre;
-    for (int kon = 0; kon < n; ++kon)
+    // usuwanie duplikatow i zostawianie tych z najwiekszym indeksem
+    for (int i = 0; i < pref_s.size(); ++i)
     {
-        while (poc < n && pref[poc].first - pref[kon].first <= s)
+        while (i < pref_s.size() - 1 && pref_s[i].first == pref_s[i + 1].first)
+        {
+            i++;
+        }
+        pref.push_back(pref_s[i]);
+    }
+
+    vector<pair<pair<int, int>, pair<int, int>>> dobre;
+    int poc = 0;
+    for (int kon = 0; kon < pref.size(); ++kon)
+    {
+        while (poc < pref.size() && pref[poc].first - pref[kon].first <= s)
         {
             if (pref[poc].first - pref[kon].first == s)
             {
-                if (dobre.size() >= 1 && dobre[dobre.size() - 1].second.first == pref[poc].first)
-                {
-                    dobre[dobre.size() - 1] = make_pair(pref[kon], pref[poc]);
-                }
-                else
-                {
-                    dobre.push_back(make_pair(pref[kon], pref[poc]));
-                }
+                dobre.push_back(make_pair(pref[kon], pref[poc]));
             }
             poc++;
         }
     }
-    // jesli wycinek bedzie rowny 1 a liczba jest pierwsza to wyswietla BRAK
-    //
-    // 6 4
-    // 4 -2 5 24 53 532
 
-    // for (int i = 0; i < dobre.size(); ++i) {
-    //     cout << "kon: " << dobre[i].first.first << " | " << dobre[i].first.second << endl
-    //     << "poc: " << dobre[i].second.first << " | " << dobre[i].second.second << endl << "---------------------" << endl;
+    // int kon;
+    // kon = pref.size() -1;
+    // int sr;
+    // for (int start = 0; start < pref.size(); ++start) {
+    //     while (poc <= kon) {
+    //         sr = (poc + kon)/2;
+    //         if(pref[sr].first - pref[start].first >= s) {
+    //             if(pref[sr].first - pref[start].first ==s)
+    //                 dobre.push_back(make_pair(pref[start],pref[sr]));
+    //             kon = sr - 1;
+    //         }
+    //         poc = sr + 1;
+    //     }
+    //     poc = 0;
+    //     kon = pref.size() -1;
     // }
 
-    int wynik = 0;
+    wynik = 0;
     if (dobre.size() == 0)
     {
-        cout << "BRAK";
+        if (s == pierwszy)
+            cout << 1;
+        else
+            cout << "BRAK";
     }
     else
     {
